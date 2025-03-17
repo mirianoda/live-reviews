@@ -1,36 +1,30 @@
-import { supabase } from "@/lib/supabaseClient";
+"use client";
 
-async function getReviews() {
-  const { data, error } = await supabase.from("reviews").select("*");
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
-  console.log("Fetched Data:", data);  // 🔍 追加！
-  console.log("Error:", error);  // 🔍 追加！
+export default function Home() {
+  const [user, setUser] = useState(null);
 
-  if (error) {
-    console.error("Error fetching reviews:", error);
-    return [];
-  }
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data.user) {
+        setUser(data.user);
+      }
+    };
 
-  return data || [];
-}
-
-export default async function Home() {
-  const reviews = await getReviews();
-
-  console.log("Rendered Reviews:", reviews);  // 🔍 追加！
+    fetchUser();
+  }, []);
 
   return (
     <div>
-      <h1>口コミ一覧</h1>
-      <ul>
-        {reviews.length > 0 ? (
-          reviews.map((review) => (
-            <li key={review.id}>{review.content}（⭐{review.rating}）</li>
-          ))
-        ) : (
-          <p>口コミがありません</p>
-        )}
-      </ul>
+      <h1>ログイン状態確認</h1>
+      {user ? (
+        <p>ログイン中: {user.email}</p>
+      ) : (
+        <p>ログインしていません</p>
+      )}
     </div>
   );
 }
