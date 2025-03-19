@@ -2,11 +2,29 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
+
+type ReviewType = {
+  id: string;
+  user_id: string;
+  venue_id: string;
+  seat_number: string;
+  artist: string;
+  visibility: number;
+  v_comment: string;
+  sound: number;
+  s_comment: string;
+  facilities: number;
+  f_comment: string;
+  access: number;
+  a_comment: string;
+  created_at: string;
+};
 
 export default function ReviewsList({ venueId }: { venueId: string }) {
-  const [reviews, setReviews] = useState([]);
-  const [user, setUser] = useState(null);
-  const [editReviewId, setEditReviewId] = useState(null);
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [editReviewId, setEditReviewId] = useState<string | null>(null);
   const [editData, setEditData] = useState({
     seat_number: "",
     artist: "",
@@ -43,7 +61,7 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
   };
 
   // 🔹 口コミの編集開始
-  const handleEditStart = (review) => {
+  const handleEditStart = (review: ReviewType) => {
     setEditReviewId(review.id);
     setEditData({
       seat_number: review.seat_number,

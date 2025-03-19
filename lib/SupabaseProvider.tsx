@@ -1,12 +1,21 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { supabase } from "./supabase";
+import { User } from "@supabase/supabase-js";
 
-const SupabaseContext = createContext(null);
+interface SupabaseContextType {
+  user: User | null;
+}
 
-export default function SupabaseProvider({ children }) {
-  const [user, setUser] = useState(null);
+const SupabaseContext = createContext<SupabaseContextType | null>(null);
+
+interface SupabaseProviderProps {
+  children: ReactNode; // ✅ 型を明示
+}
+
+export default function SupabaseProvider({ children }: SupabaseProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -24,5 +33,9 @@ export default function SupabaseProvider({ children }) {
 }
 
 export function useAuth() {
-  return useContext(SupabaseContext);
+  const context = useContext(SupabaseContext);
+  if (!context) {
+    throw new Error("useAuth は SupabaseProvider 内で使用する必要があります。");
+  }
+  return context;
 }

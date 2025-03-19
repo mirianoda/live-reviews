@@ -3,12 +3,19 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import Image from "next/image";
+
+type Venue = {
+  id: string;
+  name: string;
+};
 
 export default function Header() {
   const pathname = usePathname(); // 現在のURLパスを取得
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<Venue[]>([]);
   const [showResults, setShowResults] = useState(false);
 
   // 🔹 検索実行（Supabase の類似検索関数を呼び出す）
@@ -38,11 +45,11 @@ export default function Header() {
   return (
     <header className="sticky top-0 bg-white text-white p-4 flex justify-between items-center relative shadow">
       <h1 className="text-xl font-bold">
-        <a href="/"><img src="/logo/logo.png" alt="" className="h-10"/></a>
+        <Link href="/"><Image src="/logo/logo.png" alt="" width={100} height={10} priority/></Link>
       </h1>
 
       {/* 🔹 「会場ページ（/venue/[id]）」だけに検索窓を表示 */}
-      {pathname.startsWith("/venue/") && !pathname.includes("/review") && (
+      {(pathname === "/" || (pathname.startsWith("/venue/") && !pathname.includes("/review"))) && (
         <div className="relative">
           <input
             type="text"

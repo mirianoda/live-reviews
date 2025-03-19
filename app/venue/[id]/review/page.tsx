@@ -5,12 +5,13 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import Header from "../../../components/Header";
+import { User } from "@supabase/supabase-js";
 
-export default function ReviewPage({ params }: { params: { id: string } }) {
+export default function ReviewPage() {
   const { id: venueId } = useParams();
   const router = useRouter();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [seatNumber, setSeatNumber] = useState("");
   const [artist, setArtist] = useState("");
   const [visibility, setVisibility] = useState(0);

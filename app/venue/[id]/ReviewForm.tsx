@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
 
 export default function ReviewForm({ venueId, isOpen, onClose }: { venueId: string; isOpen: boolean; onClose: () => void }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [seatNumber, setSeatNumber] = useState("");
   const [artist, setArtist] = useState("");
   const [visibility, setVisibility] = useState(0);

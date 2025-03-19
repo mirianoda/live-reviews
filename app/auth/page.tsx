@@ -41,7 +41,7 @@ const handleSignUp = async () => {
 
   // ログイン処理
   const handleSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
