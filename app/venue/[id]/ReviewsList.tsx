@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
+import {
+  FaStar,
+} from "react-icons/fa";
+import IconRatingDisplay from "@/app/components/IconRatingDisplay";
 
 type ReviewType = {
   id: string;
@@ -100,7 +104,6 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
             {editReviewId === review.id ? (
               <>
                 <label className="block mt-2">
-                  座席番号:
                   <input type="text" value={editData.seat_number} onChange={(e) => setEditData({ ...editData, seat_number: e.target.value })} className="border rounded w-full p-2 mt-1" />
                 </label>
 
@@ -151,11 +154,28 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
               </>
             ) : (
               <>
-                <p>座席: {review.seat_number} / アーティスト: {review.artist}</p>
-                <p>見やすさ: {review.visibility} / 5（{review.v_comment}）</p>
-                <p>音響: {review.sound} / 5（{review.s_comment}）</p>
-                <p>周辺施設: {review.facilities} / 5（{review.f_comment}）</p>
-                <p>アクセス: {review.access} / 5（{review.a_comment}）</p>
+              <div className="space-x-2 mb-2">
+                <span className="text-sm bg-emerald-100 p-1 rounded"> {review.seat_number}</span>
+                <span className="text-sm bg-blue-100 p-1 rounded"> {review.artist}</span>
+              </div>
+              <div>
+                <div className="mb-2">
+                  <p className="flex"><span className="mr-2 text-base font-bold">見やすさ</span><IconRatingDisplay rating={review.visibility} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <p>{review.v_comment}</p>
+                </div>
+                <div className="mb-2">
+                  <p className="flex"><span className="mr-2 text-base font-bold">音響</span><IconRatingDisplay rating={review.sound} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <p>{review.s_comment}</p>
+                </div>
+                <div className="mb-2">
+                  <p className="flex"><span className="mr-2 text-base font-bold">周辺施設</span><IconRatingDisplay rating={review.facilities} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <p>{review.f_comment}</p>
+                </div>
+                <div>
+                  <p className="flex"><span className="mr-2 text-base font-bold">アクセス</span><IconRatingDisplay rating={review.access} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <p>{review.a_comment}</p>
+                </div>
+              </div>
               </>
             )}
 
