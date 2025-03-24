@@ -46,7 +46,7 @@ export default async function VenuePage({ params }: { params: Promise<{ id: stri
     <>
     <Header /> {/* 🔹 共通ヘッダーを表示 */}
 
-    <div className="w-screen mx-auto bg-white">
+    <div className="w-screen mx-auto">
       <div style={{ backgroundImage: `url(${venue.image_url})` }} className="bg-cover bg-center h-80 w-full"> 
         <h1 className="text-3xl font-bold pt-10 mx-4 text-white">📍{venue.name}</h1>
         <div className="flex flex-col items-end space-y-4 mx-5">
@@ -57,15 +57,15 @@ export default async function VenuePage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      <div className="bg-orange-50 px-10 pb-10">
-        <div className="flex justify-center py-5">
+      <div className="px-10 pb-10">
+        <div className="flex justify-center pt-5 pb-10">
           {/* 🔹 口コミ投稿ページへ遷移するボタン */}
-          <Link href={`/venue/${venueId}/review`} className="text-orange-300 py-1 px-7 rounded border border-orange-300">
+          <Link href={`/venue/${venueId}/review`} className="text-orange-500 py-1 px-10 rounded border border-orange-500 hover:bg-white">
            口コミを投稿する
           </Link>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 bg-white rounded-4xl border-2 border-amber-500">
           {/* 🔸 総合評価 */}
           <div className="mb-8 flex">
             <h2 className="text-2xl font-bold mr-6 text-gray-700">総合評価</h2>
