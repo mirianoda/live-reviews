@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Zen_Maru_Gothic } from "next/font/google"; // ← 追加
 import "./globals.css";
 import SupabaseProvider from "@/lib/SupabaseProvider";
 
@@ -11,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const zenMaruGothic = Zen_Maru_Gothic({ // ← 追加
+  variable: "--font-zen-maru",
+  subsets: ["latin"],
+  weight: ["400"], // 必要なら ["400", "700"] など
 });
 
 export const metadata: Metadata = {
@@ -25,18 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${zenMaruGothic.variable} antialiased`}
       >
-             <SupabaseProvider>{children}</SupabaseProvider>
+        <SupabaseProvider>{children}</SupabaseProvider>
       </body>
     </html>
   );

@@ -20,6 +20,7 @@ export default function Header() {
   const [showResults, setShowResults] = useState(false);
 
   const [user, setUser] = useState<User | null>(null); // ユーザー情報
+  const [userData, setUserData] = useState<{ username: string, avatar_url: string } | null>(null);
 
   // 🔹 ログイン状態を取得（クライアント側で）
   useEffect(() => {
@@ -34,6 +35,16 @@ export default function Header() {
 
       if (data.user) {
         setUser(data.user);
+      }
+
+      const { data: profile } = await supabase
+      .from("users")
+      .select("avatar_url, username")
+      .eq("id", data.user.id)
+      .single();
+
+      if (profile) {
+        setUserData(profile);
       }
     };
     getUser();
@@ -121,22 +132,25 @@ export default function Header() {
             </div>
           ) : (
               <>
+              <div className="flex flex-col items-center space-y-2">
+                <p className="text-sm">ようこそ、{userData?.username}さん</p>
+                <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  window.location.href = "/"; // ログアウト後、状態を更新
+                }}
+                className="text-gray-500 border border-gray-500 px-3 py-0.2 text-xs rounded hover:bg-gray-50"
+                >
+                  ログアウト
+                </button>
+              </div>
               <Image
-                src={user.user_metadata?.avatar_url || "/logo/default-avatar.png"}
+                src={userData?.avatar_url || "/logo/default-avatar.png"}
                 alt="ユーザーアイコン"
                 width={50}
                 height={50}
-                className="rounded-full"
+                className="rounded-full outline outline-1 outline-gray-500 outline-offset-2"
               />
-              <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = "/"; // ログアウト後、状態を更新
-              }}
-              className="text-red-500 border border-red-500 px-3 py-1 rounded hover:bg-red-50"
-            >
-              ログアウト
-            </button>
             </>
           )}
         </div>

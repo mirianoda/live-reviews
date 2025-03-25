@@ -18,19 +18,30 @@ export default function OAuthCallback() {
         }
 
         // users テーブルにすでにあるか確認
-        const { data: existingUser } = await supabase
+        const { data: existingUser, error: checkError } = await supabase
           .from("users")
           .select("id")
           .eq("id", user.id)
           .single();
 
+        if (checkError) {
+          console.error("usersテーブル確認エラー:", checkError.message);
+          return;
+        }
+
         if (!existingUser) {
+          const seed = crypto.randomUUID();
+          const colors = ["b6e3f4", "c0aede", "d1d4f9", "ffd5dc", "ffdfbf"];
+          const bg = colors[Math.floor(Math.random() * colors.length)];
+          const shouldFlip = Math.random() > 0.5;
+          const avatarUrl = `https://api.dicebear.com/7.x/thumbs/png?seed=${seed}&size=240&radius=50&backgroundColor=${bg}&flip=${shouldFlip}`;
+
           const { error } = await supabase.from("users").insert([
             {
               id: user.id,
               username:
-                user.user_metadata.full_name || user.email?.split("@")[0],
-              avatar_url: user.user_metadata.avatar_url || "",
+              user.user_metadata.full_name || user.email?.split("@")[0],
+              avatar_url: avatarUrl,
             },
           ]);
           if (error) {

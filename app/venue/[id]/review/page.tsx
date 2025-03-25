@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import Header from "../../../components/Header";
 import { User } from "@supabase/supabase-js";
+import { FaStar } from "react-icons/fa";
 
 export default function ReviewPage() {
   const { id: venueId } = useParams();
@@ -24,7 +25,6 @@ export default function ReviewPage() {
   const [aComment, setAComment] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ログインユーザーを取得
   useEffect(() => {
     const fetchUser = async () => {
       const { data } = await supabase.auth.getUser();
@@ -42,7 +42,7 @@ export default function ReviewPage() {
         user_id: user ? user.id : null,
         venue_id: venueId,
         seat_number: seatNumber,
-        artist: artist,
+        artist,
         visibility,
         v_comment: vComment,
         sound,
@@ -51,83 +51,110 @@ export default function ReviewPage() {
         f_comment: fComment,
         access,
         a_comment: aComment,
-      }
+      },
     ]);
 
     if (error) {
       alert("投稿に失敗しました: " + error.message);
     } else {
       alert("口コミを投稿しました！");
-      router.push(`/venue/${venueId}`); // 🔹 口コミ投稿後に会場ページへリダイレクト
+      router.push(`/venue/${venueId}`);
     }
 
     setLoading(false);
   };
 
+  const StarInput = ({ value, onChange }: { value: number; onChange: (v: number) => void }) => (
+    <div className="flex space-x-1 text-orange-300">
+      {[1, 2, 3, 4, 5].map((num) => (
+        <FaStar
+          key={num}
+          className={`cursor-pointer w-6 h-6 ${num <= value ? "fill-orange-400" : "fill-gray-300"}`}
+          onClick={() => onChange(num)}
+        />
+      ))}
+    </div>
+  );
+
   return (
     <>
-    <Header /> {/* 🔹 共通ヘッダーを適用 */}
+      <Header />
+      <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+        <h2 className="text-2xl font-bold mb-4 text-orange-300 text-center">口コミを投稿</h2>
+        {!user && <p className="text-sm text-gray-500 mb-2 text-center">※ゲストとして投稿されます</p>}
 
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">口コミを投稿</h2>
-      {!user && <p className="text-sm text-gray-500 mb-2">※ゲストとして投稿されます</p>}
-
-      <form onSubmit={handleSubmit}>
-        <label className="block mb-2">
-          座席番号:
-          <input type="text" value={seatNumber} onChange={(e) => setSeatNumber(e.target.value)} className="border rounded w-full p-2 mt-1" />
-        </label>
-
-        <label className="block mb-2">
-          アーティスト名:
-          <input type="text" value={artist} onChange={(e) => setArtist(e.target.value)} className="border rounded w-full p-2 mt-1" />
-        </label>
-
-        {/* 各評価項目 */}
-        <div className="mt-4">
-          <h3 className="font-bold">評価（0〜5）</h3>
-          <label className="block mt-2">
-            見やすさ:
-            <input type="number" min="0" max="5" value={visibility} onChange={(e) => setVisibility(Number(e.target.value))} className="border rounded w-full p-2 mt-1" />
-          </label>
-          <label className="block mt-1">
-            コメント:
-            <textarea value={vComment} onChange={(e) => setVComment(e.target.value)} className="border rounded w-full p-2 mt-1" />
+        <form onSubmit={handleSubmit}>
+          <label className="block mb-4">
+            <p className="text-sm">座席番号</p>
+            <input
+              type="text"
+              value={seatNumber}
+              onChange={(e) => setSeatNumber(e.target.value)}
+              className="w-full p-2 border border-orange-100 bg-orange-50 rounded"
+            />
           </label>
 
-          <label className="block mt-2">
-            音響:
-            <input type="number" min="0" max="5" value={sound} onChange={(e) => setSound(Number(e.target.value))} className="border rounded w-full p-2 mt-1" />
-          </label>
-          <label className="block mt-1">
-            コメント:
-            <textarea value={sComment} onChange={(e) => setSComment(e.target.value)} className="border rounded w-full p-2 mt-1" />
-          </label>
-
-          <label className="block mt-2">
-            周辺施設:
-            <input type="number" min="0" max="5" value={facilities} onChange={(e) => setFacilities(Number(e.target.value))} className="border rounded w-full p-2 mt-1" />
-          </label>
-          <label className="block mt-1">
-            コメント:
-            <textarea value={fComment} onChange={(e) => setFComment(e.target.value)} className="border rounded w-full p-2 mt-1" />
+          <label className="block mb-4">
+            <p className="text-sm">アーティスト名</p>
+            <input
+              type="text"
+              value={artist}
+              onChange={(e) => setArtist(e.target.value)}
+              className="w-full p-2 border border-orange-100 bg-orange-50 rounded"
+            />
           </label>
 
-          <label className="block mt-2">
-            アクセス:
-            <input type="number" min="0" max="5" value={access} onChange={(e) => setAccess(Number(e.target.value))} className="border rounded w-full p-2 mt-1" />
-          </label>
-          <label className="block mt-1">
-            コメント:
-            <textarea value={aComment} onChange={(e) => setAComment(e.target.value)} className="border rounded w-full p-2 mt-1" />
-          </label>
-        </div>
+          {[
+            {
+              label: "見やすさ",
+              value: visibility,
+              setValue: setVisibility,
+              comment: vComment,
+              setComment: setVComment,
+            },
+            {
+              label: "音響",
+              value: sound,
+              setValue: setSound,
+              comment: sComment,
+              setComment: setSComment,
+            },
+            {
+              label: "周辺施設",
+              value: facilities,
+              setValue: setFacilities,
+              comment: fComment,
+              setComment: setFComment,
+            },
+            {
+              label: "アクセス",
+              value: access,
+              setValue: setAccess,
+              comment: aComment,
+              setComment: setAComment,
+            },
+          ].map((item, index) => (
+            <div key={index} className="mb-4">
+              <p className="text-sm font-semibold mb-1">{item.label}</p>
+              <StarInput value={item.value} onChange={item.setValue} />
+              <textarea
+                value={item.comment}
+                onChange={(e) => item.setComment(e.target.value)}
+                className="w-full mt-2 p-2 border border-orange-100 bg-orange-50 rounded"
+                placeholder="コメントを入力..."
+              />
+            </div>
+          ))}
 
-        <button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded w-full" disabled={loading}>
-          投稿
-        </button>
-      </form>
-    </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-orange-300 text-white py-2 px-4 rounded-md font-semibold hover:bg-orange-400"
+          >
+            {loading ? "投稿中..." : "口コミを投稿"}
+          </button>
+        </form>
+      </div>
     </>
   );
 }

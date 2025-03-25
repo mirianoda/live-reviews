@@ -49,18 +49,18 @@ export default async function VenuePage({ params }: { params: Promise<{ id: stri
     <div className="w-screen mx-auto">
       <div style={{ backgroundImage: `url(${venue.image_url})` }} className="bg-cover bg-center h-80 w-full"> 
         <h1 className="text-3xl font-bold pt-10 mx-4 text-white">📍{venue.name}</h1>
-        <div className="flex flex-col items-end space-y-4 mx-5">
-          <p className="mt-2 px-2 py-1 bg-white/80 text-gray-700 w-100 rounded">収容人数: {venue.capacity}人</p>
-          <p className="mt-2 px-2 py-1 bg-white/80 text-gray-700 w-100 rounded">アクセス: {venue.access}</p>
-          <p className="mt-2 px-2 py-1 bg-white/80 text-gray-700 w-100 rounded">座席タイプ: {venue.seat}</p>
-          <a href={venue.website} className="text-blue-500 underline mt-2 block px-2 py-1 bg-white/80 w-100 rounded">公式サイト（座席案内ページ）</a>
+        <div className="flex flex-col items-end space-y-3 mx-5 text-sm">
+          <p className="mt-2 px-2 py-0.5 bg-white/80 text-gray-700 w-100 rounded">収容人数： {venue.capacity}人</p>
+          <p className="mt-2 px-2 py-0.5 bg-white/80 text-gray-700 w-100 rounded">アクセス： {venue.access}</p>
+          <p className="mt-2 px-2 py-0.5 bg-white/80 text-gray-700 w-100 rounded">座席タイプ： {venue.seat}</p>
+          <a href={venue.website} className="text-blue-500 underline mt-2 block px-2 py-0.5 bg-white/80 w-100 rounded">場内MAP（公式サイト）</a>
         </div>
       </div>
 
       <div className="px-10 pb-10">
         <div className="flex justify-center pt-5 pb-10">
           {/* 🔹 口コミ投稿ページへ遷移するボタン */}
-          <Link href={`/venue/${venueId}/review`} className="text-orange-500 py-1 px-10 rounded border border-orange-500 hover:bg-white">
+          <Link href={`/venue/${venueId}/review`} className="text-white py-1 px-15 rounded bg-orange-400 hover:bg-orange-500">
            口コミを投稿する
           </Link>
         </div>
@@ -69,7 +69,7 @@ export default async function VenuePage({ params }: { params: Promise<{ id: stri
           {/* 🔸 総合評価 */}
           <div className="mb-8 flex">
             <h2 className="text-2xl font-bold mr-6 text-gray-700">総合評価</h2>
-              <IconRatingDisplay rating={overallRating} icon={<FaStar className="text-yellow-400" />} size="text-3xl" />
+              <IconRatingDisplay rating={overallRating} icon={<FaStar />} size="text-3xl" />
           </div>
 
           {/* 🔸 カテゴリ別評価 */}

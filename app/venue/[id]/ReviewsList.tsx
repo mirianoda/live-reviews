@@ -7,6 +7,7 @@ import {
   FaStar,
 } from "react-icons/fa";
 import IconRatingDisplay from "@/app/components/IconRatingDisplay";
+import Image from "next/image";
 
 type ReviewType = {
   id: string;
@@ -25,8 +26,15 @@ type ReviewType = {
   created_at: string;
 };
 
+type ReviewWithUser = ReviewType & {
+  users: {
+    username: string;
+    avatar_url: string;
+  };
+};
+
 export default function ReviewsList({ venueId }: { venueId: string }) {
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [editReviewId, setEditReviewId] = useState<string | null>(null);
   const [editData, setEditData] = useState({
@@ -40,8 +48,16 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const { data } = await supabase.from("reviews").select("*").eq("venue_id", venueId);
-      if (data) setReviews(data);
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*, users(username, avatar_url)") // ← Joinでユーザー情報取得
+        .eq("venue_id", venueId);
+    
+      if (error) {
+        console.error("レビュー取得エラー", error);
+      } else if (data) {
+        setReviews(data as ReviewWithUser[]);
+      }
     };
 
     const fetchUser = async () => {
@@ -100,7 +116,7 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
         <p>まだ口コミはありません</p>
       ) : (
         reviews.map((review) => (
-          <div key={review.id} className="p-4 mt-2 rounded-md bg-white shadow-md">
+          <div key={review.id} className="p-4 mt-2 rounded-md bg-white shadow-md relative">
             {editReviewId === review.id ? (
               <>
                 <label className="block mt-2">
@@ -154,25 +170,48 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
               </>
             ) : (
               <>
-              <div className="space-x-2 mb-2">
-                <span className="text-sm bg-emerald-100 p-1 rounded"> {review.seat_number}</span>
-                <span className="text-sm bg-blue-100 p-1 rounded"> {review.artist}</span>
+              {/* ユーザー情報＋投稿日 */}
+
+              <div className="flex items-center mb-2 justify-between">
+                <div className="flex items-center">
+                  <div className="flex items-center space-x-2">
+                    <Image
+                      src={review.users?.avatar_url || "/logo/default-avatar.png"}
+                      alt="ユーザーアイコン"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full border-2 border-gray-300 outline outline-1 outline-offset-2 outline-gray-400"
+                    />
+                    <span className="text-sm text-gray-800 font-semibold">
+                      {review.users?.username || "匿名ユーザー"}
+                    </span>
+                  </div>
+                  <div className="space-x-2 mb-2 ml-5">
+                    <span className="text-sm bg-emerald-100 p-1 rounded"> {review.seat_number}</span>
+                    <span className="text-sm bg-blue-100 p-1 rounded"> {review.artist}</span>
+                  </div>
+                </div>
+                <span className="text-xs text-gray-500">
+                    {new Date(review.created_at).toLocaleDateString("ja-JP")}
+                </span>
               </div>
+
+
               <div>
                 <div className="mb-2">
-                  <p className="flex"><span className="mr-2 text-base font-bold">見やすさ</span><IconRatingDisplay rating={review.visibility} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <div className="flex"><span className="mr-2 text-base font-bold">見やすさ</span><IconRatingDisplay rating={review.visibility} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></div>
                   <p>{review.v_comment}</p>
                 </div>
                 <div className="mb-2">
-                  <p className="flex"><span className="mr-2 text-base font-bold">音響</span><IconRatingDisplay rating={review.sound} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <div className="flex"><span className="mr-2 text-base font-bold">音響</span><IconRatingDisplay rating={review.sound} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></div>
                   <p>{review.s_comment}</p>
                 </div>
                 <div className="mb-2">
-                  <p className="flex"><span className="mr-2 text-base font-bold">周辺施設</span><IconRatingDisplay rating={review.facilities} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <div className="flex"><span className="mr-2 text-base font-bold">周辺施設</span><IconRatingDisplay rating={review.facilities} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></div>
                   <p>{review.f_comment}</p>
                 </div>
                 <div>
-                  <p className="flex"><span className="mr-2 text-base font-bold">アクセス</span><IconRatingDisplay rating={review.access} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></p>
+                  <div className="flex"><span className="mr-2 text-base font-bold">アクセス</span><IconRatingDisplay rating={review.access} icon={<FaStar className="text-yellow-400" />} size="text-lg" /></div>
                   <p>{review.a_comment}</p>
                 </div>
               </div>
@@ -180,11 +219,11 @@ export default function ReviewsList({ venueId }: { venueId: string }) {
             )}
 
             {user && user.id === review.user_id && (
-              <div className="flex space-x-2 mt-2">
-                <button onClick={() => handleEditStart(review)} className="bg-yellow-500 text-white p-1 rounded">
+              <div className="absolute bottom-3 right-4 flex space-x-2">
+                <button onClick={() => handleEditStart(review)} className="bg-gray-500 text-white py-0.5 px-2 rounded text-xs">
                   編集
                 </button>
-                <button onClick={() => handleDelete(review.id)} className="bg-red-500 text-white p-1 rounded">
+                <button onClick={() => handleDelete(review.id)} className="bg-gray-500 text-white py-0.5 px-2 rounded text-xs">
                   削除
                 </button>
               </div>

@@ -16,6 +16,12 @@ export default function SignUpPage() {
 
   const handleSignUp = async () => {
     const { data, error } = await supabase.auth.signUp({ email, password });
+    const seed = crypto.randomUUID();
+    const colors = ["b6e3f4", "c0aede", "d1d4f9", "ffd5dc", "ffdfbf"];
+    const bg = colors[Math.floor(Math.random() * colors.length)];
+    const shouldFlip = Math.random() > 0.5;
+
+    const avatarUrl = `https://api.dicebear.com/7.x/thumbs/png?seed=${seed}&size=240&radius=50&backgroundColor=${bg}&flip=${shouldFlip}`;
   
     if (error) {
       if (error.message.includes("Password should be at least 6 characters")) {
@@ -30,7 +36,7 @@ export default function SignUpPage() {
       const { error: insertError } = await supabase.from("users").insert({
         id: data.user.id,
         username: email.split("@")[0],
-        avatar_url: "",
+        avatar_url: avatarUrl,
         confirmed: false, //メール未確認として登録
       });
   
