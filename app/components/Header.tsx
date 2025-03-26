@@ -82,7 +82,7 @@ export default function Header() {
       {/* 🔹 ロゴ */}
       <h1 className="text-xl font-bold">
         <Link href="/">
-          <Image src="/logo/logo3.png" alt="logo" width={100} height={10} priority />
+          <Image src="/logo/logo5.png" alt="logo" width={180} height={40} priority />
         </Link>
       </h1>
 
@@ -97,7 +97,7 @@ export default function Header() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowResults(true)}
               placeholder="🔍 会場を検索"
-              className="p-2 rounded border border-amber-400 text-black w-64"
+              className="p-2 rounded border border-[#fae4de] text-black w-64"
             />
             {showResults && searchResults.length > 0 && (
               <ul className="absolute left-0 w-64 bg-white text-black border rounded mt-1 shadow-lg z-50">
@@ -119,38 +119,30 @@ export default function Header() {
             <div className="flex space-x-4">
               <button
                 onClick={() => router.push("/login")}
-                className="text-orange-300 border border-orange-300 px-4 py-1 rounded hover:bg-orange-50"
+                className="text-[#fae4de] border border-[#fae4de] px-4 py-1 rounded hover:bg-[#fdf8f5]"
               >
                 ログイン
               </button>
               <button
                 onClick={() => router.push("/signup")}
-                className="bg-orange-300 text-white px-4 py-1 rounded hover:bg-orange-500"
+                className="bg-[#fae4de] text-white px-4 py-1 rounded hover:bg-[#ef866b]"
               >
                 無料登録
               </button>
             </div>
           ) : (
               <>
-              <div className="flex flex-col items-center space-y-2">
-                <p className="text-sm">ようこそ、{userData?.username}さん</p>
-                <button
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  window.location.href = "/"; // ログアウト後、状態を更新
-                }}
-                className="text-gray-500 border border-gray-500 px-3 py-0.2 text-xs rounded hover:bg-gray-50"
-                >
-                  ログアウト
-                </button>
-              </div>
-              <Image
-                src={userData?.avatar_url || "/logo/default-avatar.png"}
-                alt="ユーザーアイコン"
-                width={50}
-                height={50}
-                className="rounded-full outline outline-1 outline-gray-500 outline-offset-2"
-              />
+                <p className="text-xs">👋ようこそ、{userData?.username}さん</p>
+
+                <Link href="/mypage">
+                  <Image
+                    src={userData?.avatar_url || "/logo/default-avatar.png"}
+                    alt="ユーザーアイコン"
+                    width={50}
+                    height={50}
+                    className="rounded-2xl outline outline-1 outline-[#ef866b] outline-offset-2 cursor-pointer"
+                  />
+                </Link>
             </>
           )}
         </div>

@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import Header from "../components/Header";
 import { FcGoogle } from "react-icons/fc";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -39,7 +38,6 @@ export default function LoginPage() {
 
   return (
     <>
-    <Header />
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-4 text-orange-300">ログイン</h2>

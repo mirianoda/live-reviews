@@ -6,10 +6,16 @@ export default function IconRatingDisplay({
   rating,
   icon,
   size = "text-xl",
+  fullColor = "text-yellow-400",
+  halfColor = "text-yellow-300 opacity-70",
+  emptyColor = "text-gray-300",
 }: {
   rating: number;
   icon: ReactNode;
   size?: string;
+  fullColor?: string;
+  halfColor?: string;
+  emptyColor?: string;
 }) {
   const isValidRating = typeof rating === "number" && !isNaN(rating) && rating > 0;
   const safeRating = isValidRating ? rating : 0;
@@ -25,31 +31,29 @@ export default function IconRatingDisplay({
         {isValidRating ? (
           <>
             {Array.from({ length: full }).map((_, i) => (
-              <span key={`full-${i}`} className={`${size} text-yellow-400`}>
+              <span key={`full-${i}`} className={`${size} ${fullColor}`}>
                 {icon}
               </span>
             ))}
             {half && (
-              <span className={`${size} text-yellow-300 opacity-70`}>
+              <span className={`${size} ${halfColor}`}>
                 {icon}
               </span>
             )}
             {Array.from({ length: empty }).map((_, i) => (
-              <span key={`empty-${i}`} className={`${size} text-gray-300`}>
+              <span key={`empty-${i}`} className={`${size} ${emptyColor}`}>
                 {icon}
               </span>
             ))}
           </>
         ) : (
-          // 評価がない場合は灰色の星5つ
           Array.from({ length: 5 }).map((_, i) => (
-            <span key={`empty-${i}`} className={`${size} text-gray-300`}>
+            <span key={`empty-${i}`} className={`${size} ${emptyColor}`}>
               {icon}
             </span>
           ))
         )}
       </div>
-      {/* 数値表示は評価があるときだけ */}
       {isValidRating && (
         <span className="text-gray-600 text-sm">{safeRating.toFixed(1)}</span>
       )}

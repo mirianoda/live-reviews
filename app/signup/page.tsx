@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import Header from "../components/Header";
 import { FcGoogle } from "react-icons/fc";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -21,7 +20,7 @@ export default function SignUpPage() {
     const bg = colors[Math.floor(Math.random() * colors.length)];
     const shouldFlip = Math.random() > 0.5;
 
-    const avatarUrl = `https://api.dicebear.com/7.x/thumbs/png?seed=${seed}&size=240&radius=50&backgroundColor=${bg}&flip=${shouldFlip}`;
+    const avatarUrl = `https://api.dicebear.com/7.x/thumbs/png?seed=${seed}&size=240&radius=10&backgroundColor=${bg}&flip=${shouldFlip}`;
   
     if (error) {
       if (error.message.includes("Password should be at least 6 characters")) {
@@ -81,7 +80,6 @@ export default function SignUpPage() {
 
   return (
     <>
-    <Header />
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-4 text-orange-300">無料登録</h2>

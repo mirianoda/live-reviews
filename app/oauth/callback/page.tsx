@@ -34,7 +34,7 @@ export default function OAuthCallback() {
           const colors = ["b6e3f4", "c0aede", "d1d4f9", "ffd5dc", "ffdfbf"];
           const bg = colors[Math.floor(Math.random() * colors.length)];
           const shouldFlip = Math.random() > 0.5;
-          const avatarUrl = `https://api.dicebear.com/7.x/thumbs/png?seed=${seed}&size=240&radius=50&backgroundColor=${bg}&flip=${shouldFlip}`;
+          const avatarUrl = `https://api.dicebear.com/7.x/thumbs/png?seed=${seed}&size=240&radius=10&backgroundColor=${bg}&flip=${shouldFlip}`;
 
           const { error } = await supabase.from("users").insert([
             {
