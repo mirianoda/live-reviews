@@ -38,15 +38,15 @@ export default function LoginPage() {
 
   return (
     <>
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow text-[#ef866b]">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-4 text-orange-300">ログイン</h2>
+        <h2 className="text-2xl font-bold mb-4">ログイン</h2>
       </div>
       <p className="text-sm mb-1">メールアドレス</p>
       <input
         type="email"
         placeholder="sekirepo@example.com"
-        className="w-full p-2 border mb-4 border-orange-100 bg-orange-50"
+        className="w-full p-2 border mb-4 border-[#fae4de] bg-[#fdf8f5]"
         onChange={(e) => setEmail(e.target.value)}
       />
       <p className="text-sm mb-1">パスワード（英数字6文字以上）</p>
@@ -56,7 +56,7 @@ export default function LoginPage() {
         className="w-full p-2 mb-4 bg-orange-50 border border-orange-100"
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleSignIn} className="w-full bg-orange-300 text-white  py-3 px-4 rounded-md font-semibold hover:bg-orange-500  cursor-pointer">
+      <button onClick={handleSignIn} className="w-full bg-[#f9a691] text-white  py-3 px-4 rounded-md font-semibold hover:bg-[#ef866b]  cursor-pointer">
         メールでログイン
       </button>
 

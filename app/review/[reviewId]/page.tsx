@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { FaEye, FaHeadphones, FaStore, FaTrain } from "react-icons/fa";
 import IconRatingDisplay from "@/app/components/IconRatingDisplay";
+import Image from "next/image";
 
 type ReviewDetail = {
   id: string;
@@ -69,6 +70,26 @@ export default function ReviewDetailPage() {
       <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow text-gray-700">
         <h2 className="text-2xl font-bold mb-4 text-[#ef866b] text-center">口コミ詳細</h2>
 
+        <div className="mt-8 text-center bg-[#ffd4c7] p-2">
+          口コミをXでもシェアしよう！
+          <Image
+            src={`http://sekirepo.com/api/og/review/${reviewId}`}
+            alt="口コミOG画像"
+            className="w-full max-w-[600px] border shadow-md my-6"
+            width={100}
+            height={100}
+            unoptimized
+          />
+          <a
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://sekirepo.com/review/${review.id}`)}&text=${encodeURIComponent("ライブの席レポ投稿しました！")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white bg-black px-4 py-2 rounded inline-block mt-2"
+          >
+            Xでシェア
+          </a>
+        </div>
+
         <div className="text-sm text-center text-gray-600 mb-4">
           会場: <span className="font-semibold text-indigo-800 underline cursor-pointer" onClick={() => router.push(`/venue/${review.venue_id}`)}>{review.venues?.name}</span> / アーティスト: <span>{review.artists?.name || "不明"}</span>
         </div>
@@ -121,16 +142,6 @@ export default function ReviewDetailPage() {
           </div>
         )}
 
-        <div className="mt-8 text-center">
-          <a
-            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`http://localhost:3000/review/${review.id}`)}&text=${encodeURIComponent("ライブの席レポ投稿しました！")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white bg-black px-4 py-2 rounded inline-block"
-          >
-            Xでシェア
-          </a>
-        </div>
       </div>
     </>
   );

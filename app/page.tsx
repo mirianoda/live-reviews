@@ -73,7 +73,7 @@ export default function Home() {
     <div>
 
       <div className="max-w-3xl mx-auto p-6 text-center my-15">
-        <h1 className="text-2xl font-bold mb-4 text-[#ef866b]">
+        <h1 className="text-xl font-bold mb-4 text-[#ef866b] sm:text-2xl">
           座席からの推しの見え方がわかる！
         </h1>
         <Image src="/logo/logo5.png" alt="logo" width={300} height={300} className="m-auto" priority />
@@ -102,7 +102,7 @@ export default function Home() {
                 <li key={venue.id} className="text-left">
                   <Link
                     href={`/venue/${venue.id}`}
-                    className="block px-4 py-2 hover:bg-orange-50"
+                    className="block px-4 py-2 hover:bg-[#fdf8f5]"
                     onClick={() => setSearch("")}
                   >
                     {venue.name}
@@ -126,7 +126,7 @@ export default function Home() {
           return (
             <div key={category} className="mb-10">
               <h2 className="text-xl font-bold text-[#ef866b] mb-4">{category}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {filtered.map((venue) => (
                   <Link
                     key={venue.id}

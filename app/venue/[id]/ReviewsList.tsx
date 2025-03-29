@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { FaStar } from "react-icons/fa";
 import IconRatingDisplay from "@/app/components/IconRatingDisplay";
 import Image from "next/image";
+import LikeButton from "./LikeButton"; // ← 事前に用意してね！
 
 interface Filters {
   artistId: string;
@@ -46,8 +47,21 @@ type ReviewWithUser = ReviewType & {
 
 export default function ReviewsList({ venueId, filters }: { venueId: string; filters: Filters }) {
   const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
-  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+  // const router = useRouter();
 
+  // 🔹 ログイン中ユーザーの取得
+  useEffect(() => {
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (!error && data?.user) {
+        setUserId(data.user.id);
+      }
+    };
+    getUser();
+  }, []);
+
+  // 🔹 フィルターに基づいてレビュー取得
   useEffect(() => {
     const fetchReviews = async () => {
       let query = supabase
@@ -55,14 +69,8 @@ export default function ReviewsList({ venueId, filters }: { venueId: string; fil
         .select("*, users(username, avatar_url), artists(name)")
         .eq("venue_id", venueId);
 
-      if (filters.artistId) {
-        query = query.eq("artist_id", filters.artistId);
-      }
-
-      if (filters.seat) {
-        query = query.ilike("seat_number", `%${filters.seat}%`);
-      }
-
+      if (filters.artistId) query = query.eq("artist_id", filters.artistId);
+      if (filters.seat) query = query.ilike("seat_number", `%${filters.seat}%`);
       if (filters.keyword) {
         query = query.or([
           `v_comment.ilike.%${filters.keyword}%`,
@@ -71,19 +79,14 @@ export default function ReviewsList({ venueId, filters }: { venueId: string; fil
           `a_comment.ilike.%${filters.keyword}%`,
         ].join(","));
       }
-
       if (filters.startYear && filters.startMonth) {
-        const startDate = `${filters.startYear}-${filters.startMonth}-01`;
-        query = query.gte("created_at", startDate);
+        query = query.gte("created_at", `${filters.startYear}-${filters.startMonth}-01`);
       }
-
       if (filters.endYear && filters.endMonth) {
-        const endDate = `${filters.endYear}-${filters.endMonth}-31`;
-        query = query.lte("created_at", endDate);
+        query = query.lte("created_at", `${filters.endYear}-${filters.endMonth}-31`);
       }
 
       const { data, error } = await query;
-
       if (!error && data) {
         setReviews(data as ReviewWithUser[]);
       }
@@ -97,52 +100,73 @@ export default function ReviewsList({ venueId, filters }: { venueId: string; fil
   }
 
   return (
-    <div className="mt-6 text-gray-700">
+    <div className="mt-6 text-gray-700 space-y-4">
       {reviews.map((review) => (
         <div
           key={review.id}
-          className="p-4 mt-2 rounded-md bg-white shadow-md hover:bg-[#faf4f2] cursor-pointer"
-          onClick={() => router.push(`/review/${review.id}`)}
+          className="p-5 rounded-lg bg-white shadow-md border border-gray-200"
+          // onClick={() => router.push(`/review/${review.id}`)}
         >
-          <div className="flex items-center mb-2 justify-between">
-            <div className="flex items-center">
-              <div className="flex items-center space-x-2">
-                <Image
-                  src={review.users?.avatar_url || "/logo/default-avatar.png"}
-                  alt="ユーザーアイコン"
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full border-2 border-gray-300 outline outline-1 outline-offset-2 outline-gray-400"
-                />
-                <span className="text-sm text-gray-800 font-semibold">
-                  {review.users?.username || "ゲストさん"}
-                </span>
+          {/* 🔹 ヘッダー */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-3">
+              <Image
+                src={review.users?.avatar_url || "/logo/default-avatar.png"}
+                alt="ユーザーアイコン"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full border-2 border-gray-300"
+              />
+              <div className="text-sm text-gray-800 font-semibold">
+                {review.users?.username || "ゲストさん"}
               </div>
-              <div className="space-x-2 mb-2 ml-5">
-                <span className="text-sm bg-emerald-100 p-1 rounded"> {review.seat_number}</span>
-                <span className="text-sm bg-blue-100 p-1 rounded"> {review.artists?.name || "不明なアーティスト"}</span>
+              <div className="flex space-x-2 text-xs text-gray-600">
+                <span className="bg-[#9fecdb] px-2 py-0.5 rounded">{review.seat_number}</span>
+                <span className="bg-[#addcf1] px-2 py-0.5 rounded">{review.artists?.name || "不明なアーティスト"}</span>
               </div>
             </div>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-400 whitespace-nowrap">
               {new Date(review.created_at).toLocaleDateString("ja-JP")}
             </span>
           </div>
 
-          <div className="mb-2">
-            <div className="flex"><span className="mr-2 text-base font-bold">見やすさ</span><IconRatingDisplay rating={review.visibility} icon={<FaStar />} size="text-lg" /></div>
-            <p>{review.v_comment}</p>
+          {/* 🔹 評価項目 */}
+          <div className="divide-y divide-gray-200">
+            <div className="py-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-semibold text-sm text-gray-700">👀 見やすさ</span>
+                <IconRatingDisplay rating={review.visibility} icon={<FaStar />} size="text-base" />
+              </div>
+              <p className="text-sm text-gray-600">{review.v_comment}</p>
+            </div>
+
+            <div className="py-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-semibold text-sm text-gray-700">🎧 音響</span>
+                <IconRatingDisplay rating={review.sound} icon={<FaStar />} size="text-base" />
+              </div>
+              <p className="text-sm text-gray-600">{review.s_comment}</p>
+            </div>
+
+            <div className="py-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-semibold text-sm text-gray-700">🏪 周辺施設</span>
+                <IconRatingDisplay rating={review.facilities} icon={<FaStar />} size="text-base" />
+              </div>
+              <p className="text-sm text-gray-600">{review.f_comment}</p>
+            </div>
+
+            <div className="pt-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="font-semibold text-sm text-gray-700">🚃 アクセス</span>
+                <IconRatingDisplay rating={review.access} icon={<FaStar />} size="text-base" />
+              </div>
+              <p className="text-sm text-gray-600">{review.a_comment}</p>
+            </div>
           </div>
-          <div className="mb-2">
-            <div className="flex"><span className="mr-2 text-base font-bold">音響</span><IconRatingDisplay rating={review.sound} icon={<FaStar />} size="text-lg" /></div>
-            <p>{review.s_comment}</p>
-          </div>
-          <div className="mb-2">
-            <div className="flex"><span className="mr-2 text-base font-bold">周辺施設</span><IconRatingDisplay rating={review.facilities} icon={<FaStar />} size="text-lg" /></div>
-            <p>{review.f_comment}</p>
-          </div>
-          <div>
-            <div className="flex"><span className="mr-2 text-base font-bold">アクセス</span><IconRatingDisplay rating={review.access} icon={<FaStar />} size="text-lg" /></div>
-            <p>{review.a_comment}</p>
+          <div className="mt-3">
+            {/* 🔹 いいね機能 */}
+            <LikeButton reviewId={review.id} userId={userId} />
           </div>
         </div>
       ))}

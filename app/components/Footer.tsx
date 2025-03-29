@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="bg-gray-50 text-gray-700 py-10 mt-16 border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {/* ロゴとキャッチコピー */}
         <div>
           <div className="flex items-center space-x-2 mb-2">
@@ -24,22 +24,13 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Linksセクション（将来的に拡張可能） */}
+        {/* Linksセクション */}
         <div>
           <h3 className="font-bold mb-2 text-sm">Links</h3>
           <ul className="space-y-1 text-sm">
             <li><Link href="/">会場一覧</Link></li>
             <li><Link href="/mypage">マイページ</Link></li>
           </ul>
-        </div>
-
-        {/* ダウンロードボタンなど（今は仮） */}
-        <div>
-          <h3 className="font-bold mb-2 text-sm">アプリでより便利に</h3>
-          <div className="space-y-2">
-            <Image src="/badges/appstore.png" alt="App Store" width={120} height={40} />
-            <Image src="/badges/googleplay.png" alt="Google Play" width={120} height={40} />
-          </div>
         </div>
       </div>
     </footer>

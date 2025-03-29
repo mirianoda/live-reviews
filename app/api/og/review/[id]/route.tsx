@@ -1,0 +1,106 @@
+import { ImageResponse } from "@vercel/og";
+import { NextRequest } from "next/server";
+import { supabase } from "@/lib/supabase";
+
+// OGP画像は Edge Function で動作させる必要がある
+export const runtime = "edge";
+
+// ReviewsList.tsxと同じ型定義を使用
+type ReviewType = {
+  id: string;
+  user_id: string;
+  venue_id: string;
+  seat_number: string;
+  artist_id: string;
+  visibility: number;
+  v_comment: string;
+  sound: number;
+  s_comment: string;
+  facilities: number;
+  f_comment: string;
+  access: number;
+  a_comment: string;
+  created_at: string;
+};
+
+type ReviewWithUser = ReviewType & {
+  users: {
+    username: string;
+    avatar_url: string;
+  } | null;
+  artists: {
+    name: string;
+  } | null;
+};
+
+// Next.js 14 App Router での正しいEdge APIハンドラー定義
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const reviewId = (await params).id;
+
+  // Supabaseから口コミデータを取得（結合含む）
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(
+      "*, users(username, avatar_url), artists(name)"
+    )
+    .eq("id", reviewId)
+    .single();
+
+  // データがなければ404
+  if (!data || error) {
+    return new Response("Not found", { status: 404 });
+  }
+
+  // ReviewsListと同じ型構造に合わせる
+  const review = data as ReviewWithUser;
+
+  // OGP画像を返す
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          fontSize: 25,
+          padding: 70,
+          backgroundColor: "#fff8f5",
+          color: "#333",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          lineHeight: 1.5,
+          backgroundImage: 'url(https://sekirepo.com/logo/waku.png)', 
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover', 
+        }}
+      >
+        <h1 style={{ fontSize: 37, marginBottom: 20 }}>
+        {review.artists?.name ?? "不明"}のライブに行ってきました🐻
+        </h1>
+        <p>🎫 座席: {review.seat_number}</p>
+        <p>👀 見やすさ: {review.v_comment}</p>
+        <p>🎧 音響: {review.s_comment}</p>
+        <p>🏪 周辺施設: {review.f_comment}</p>
+        <p>🚃 アクセス: {review.a_comment}</p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 30 }}>
+          <p style={{ fontSize: 22, color: "#ef866b", display: "block" }}>#席レポ</p>
+          <img
+            src="https://sekirepo.com/logo/logo5.png"
+            alt="logo"
+            width={120}
+            height={40}
+            style={{ display: "block" }}
+          />
+        </div>
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+    }
+  );
+}

@@ -120,7 +120,7 @@ export default function ReviewEditPage() {
       {[1, 2, 3, 4, 5].map((num) => (
         <FaStar
           key={num}
-          className={`cursor-pointer w-6 h-6 ${num <= value ? "fill-orange-400" : "fill-gray-300"}`}
+          className={`cursor-pointer w-6 h-6 ${num <= value ? "fill-[#ef866b]" : "fill-gray-300"}`}
           onClick={() => onChange(num)}
         />
       ))}
@@ -131,26 +131,26 @@ export default function ReviewEditPage() {
 
   return (
     <>
-      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow text-gray-700">
-        <h2 className="text-2xl font-bold mb-6 text-orange-300 text-center">口コミを編集</h2>
+      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow text-[#ef866b]">
+        <h2 className="text-2xl font-bold mb-6 text-center">口コミを編集</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="border border-orange-100 p-4 bg-orange-50 rounded">
+          <div className="border border-[#fae4de] p-4 bg-[#fdf8f5] rounded">
             <label className="text-sm font-semibold block mb-1">座席番号</label>
             <input
               name="seat_number"
               value={formData.seat_number}
               onChange={handleChange}
-              className="w-full p-2 border border-orange-100 rounded"
+              className="w-full p-2 border border-[#fae4de] bg-white rounded"
             />
           </div>
 
-          <div className="border border-orange-100 p-4 bg-orange-50 rounded">
+          <div className="border border-[#fae4de] p-4 bg-[#fdf8f5] rounded">
             <label className="text-sm font-semibold block mb-1">アーティスト名</label>
             <select
               name="artist_id"
               value={formData.artist_id}
               onChange={handleChange}
-              className="w-full p-2 border border-orange-100 bg-orange-50 rounded"
+              className="w-full p-2 border border-[#fae4de] bg-white rounded"
             >
               <option value="">-- 選択してください --</option>
               {artistList.map((a) => (
@@ -163,13 +163,13 @@ export default function ReviewEditPage() {
               name="custom_artist"
               value={formData.custom_artist}
               onChange={handleChange}
-              className="w-full mt-1 p-2 border border-orange-100 bg-orange-50 rounded"
+              className="w-full mt-1 p-2 border border-[#fae4de] bg-white rounded"
               placeholder="アーティスト名を入力"
             />
           </div>
 
           {fields.map(({ key, label, commentKey, icon, placeholder }) => (
-            <div key={key} className="border border-gray-100 p-4 bg-gray-50 rounded">
+            <div key={key} className="border border-[#fae4de] p-2 bg-[#fdf8f5] rounded">
               <label className="text-sm font-semibold block mb-1 flex items-center gap-2">
                 {icon} {label}
               </label>
@@ -181,7 +181,7 @@ export default function ReviewEditPage() {
                 name={commentKey}
                 value={formData[commentKey as keyof typeof formData] as string}
                 onChange={handleChange}
-                className="w-full mt-2 p-2 border border-gray-200 rounded"
+                className="w-full mt-2 p-2 h-30 border border-[#fae4de] bg-white rounded "
                 placeholder={placeholder}
               />
             </div>
@@ -197,7 +197,7 @@ export default function ReviewEditPage() {
             </button>
             <button
               type="submit"
-              className="w-full bg-orange-300 hover:bg-orange-400 text-white font-semibold py-2 px-4 rounded"
+              className="w-full bg-[#f9a691] hover:bg-[#ef866b] text-white font-semibold py-2 px-4 rounded"
             >
               更新する
             </button>

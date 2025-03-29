@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { FaRandom } from "react-icons/fa";
 
 type Review = {
   id: string;
@@ -97,7 +98,10 @@ export default function MyPage() {
 
       <div className="flex flex-col items-center mb-6">
         <Image src={avatarUrl} alt="プロフィール画像" width={80} height={80} className="rounded-2xl border-2 border-[#f9a691]" />
-        <button onClick={handleRandomAvatar} className="mt-2 text-sm text-[#ef866b] underline">ランダムな画像に変更</button>
+        <button onClick={handleRandomAvatar} className="mt-3 text-sm text-[#ef866b] cursor-pointer">
+          <FaRandom className="m-auto text-3xl"/>
+          ランダムな画像に変更
+        </button>
       </div>
 
       <label className="block mb-4">

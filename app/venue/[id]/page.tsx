@@ -64,6 +64,41 @@ export default function VenuePage({ params }: { params: Promise<{ id: string }> 
     overall: 0,
   });
 
+  const renderVenueInfo = (venue: Venue) => (
+    <>
+      <div className="flex items-center space-x-2">
+        <span className="text-lg">👥</span>
+        <p>
+          <span className="font-semibold">収容人数：</span>
+          {venue.capacity.toLocaleString()}人
+        </p>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="text-lg">🚶</span>
+        <p>
+          <span className="font-semibold">アクセス：</span>
+          {venue.access}
+        </p>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="text-lg">💺</span>
+        <p>
+          <span className="font-semibold">座席タイプ：</span>
+          {venue.seat}
+        </p>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="text-lg">🌐</span>
+        <a
+          href={venue.website}
+          className="text-blue-600 underline hover:text-blue-800 transition"
+        >
+          場内MAP（公式サイト）
+        </a>
+      </div>
+    </>
+  );  
+
   useEffect(() => {
     const fetchAverages = async () => {
       const { data } = await supabase
@@ -92,7 +127,7 @@ export default function VenuePage({ params }: { params: Promise<{ id: string }> 
           overall: (sum.visibility + sum.sound + sum.facilities + sum.access) / 4 / total,
         });
       }
-    };
+    };  
 
     fetchAverages();
   }, [venueId]);
@@ -100,62 +135,95 @@ export default function VenuePage({ params }: { params: Promise<{ id: string }> 
   if (!venue) return <p>会場情報を取得中...</p>;
 
   return (
-    <>
-      <div className="w-screen mx-auto">
-        <div
-          style={{ backgroundImage: `url(${venue.image_url})` }}
-          className="bg-cover bg-center h-80 w-full"
-        >
-          <h1 className="text-3xl font-bold pt-10 mx-4 text-white">📍{venue.name}</h1>
-          <div className="flex flex-col items-end space-y-3 mx-5 text-sm">
-            <p className="mt-2 px-2 py-0.5 bg-white/80 text-gray-700 w-100 rounded">
-              収容人数： {venue.capacity}人
-            </p>
-            <p className="mt-2 px-2 py-0.5 bg-white/80 text-gray-700 w-100 rounded">
-              アクセス： {venue.access}
-            </p>
-            <p className="mt-2 px-2 py-0.5 bg-white/80 text-gray-700 w-100 rounded">
-              座席タイプ： {venue.seat}
-            </p>
-            <a
-              href={venue.website}
-              className="text-blue-500 underline mt-2 block px-2 py-0.5 bg-white/80 w-100 rounded"
-            >
-              場内MAP（公式サイト）
-            </a>
-          </div>
-        </div>
+<div className="w-full mx-auto">
+  {/* トップ画像 */}
+  <div
+    style={{ backgroundImage: `url(${venue.image_url})` }}
+    className="bg-cover bg-center h-60 sm:h-80 w-full relative text-white"
+  >
 
-        <div className="px-10 pb-10">
-          <div className="flex justify-center pt-5 pb-10">
-            <Link
-              href={`/venue/${venueId}/review`}
-              className="text-white py-1 px-15 rounded bg-[#f9a691] hover:bg-[#ef866b]"
-            >
-              口コミを投稿する
-            </Link>
-          </div>
+    {/* 会場名 */}
+    <h1 className="absolute top-6 left-4 text-2xl sm:text-3xl font-bold z-10">
+      📍{venue.name}
+    </h1>
 
-          <div className="p-6 bg-white rounded-4xl border-2 border-[#fae4de] mb-10">
-            <div className="mb-8 flex">
-              <h2 className="text-2xl font-bold mr-6 text-gray-700">総合評価</h2>
-              <IconRatingDisplay rating={average.overall} icon={<FaStar />} size="text-3xl" />
-            </div>
+    {/* PC用：右下固定カード（非表示 on モバイル） */}
+    <div className="hidden sm:block absolute bottom-4 right-4 bg-white/70 backdrop-blur-md rounded-xl shadow-lg p-4 text-sm text-gray-900 space-y-3 z-10">
+      {renderVenueInfo(venue)}
+    </div>
+  </div>
 
-            <div className="text-gray-700">
-              <h2 className="text-lg mb-4">カテゴリ別評価</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <LabeledRating label="見やすさ" icon={<FaEye />} rating={average.visibility} fullColor="text-green-500" halfColor="text-green-300" />
-                <LabeledRating label="音響" icon={<FaHeadphones />} rating={average.sound} fullColor="text-blue-500" halfColor="text-blue-300" />
-                <LabeledRating label="周辺施設" icon={<FaStore />} rating={average.facilities} fullColor="text-pink-500" halfColor="text-pink-300" />
-                <LabeledRating label="アクセス" icon={<FaTrain />} rating={average.access} fullColor="text-orange-500" halfColor="text-orange-300" />
-              </div>
-            </div>
-          </div>
-          <ReviewSearchForm artistList={artistList} onSearch={setFilters} />
-          <ReviewsList venueId={venueId} filters={filters} />
+  {/* モバイル用：画像の下に表示（非表示 on PC） */}
+  <div className="sm:hidden px-4 mt-4">
+    <div className="bg-white/90 rounded-xl shadow-md p-4 space-y-3 text-sm text-gray-900">
+      {renderVenueInfo(venue)}
+    </div>
+  </div>
+
+  {/* 中央ボタン */}
+  <div className="flex justify-center pt-5 pb-10 px-4">
+    <Link
+      href={`/venue/${venueId}/review`}
+      className="text-white py-2 px-6 rounded bg-[#f9a691] hover:bg-[#ef866b] text-sm sm:text-base"
+    >
+      口コミを投稿する
+    </Link>
+  </div>
+
+  {/* 評価セクション */}
+  <div className="px-4 sm:px-10 pb-10">
+    <div className="p-4 sm:p-6 bg-white rounded-2xl border-2 border-[#fae4de] mb-10">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-700 mr-4 mb-2 sm:mb-0">
+          総合評価
+        </h2>
+        <IconRatingDisplay
+          rating={average.overall}
+          icon={<FaStar />}
+          size="text-2xl sm:text-3xl"
+        />
+      </div>
+
+      <div className="text-gray-700">
+        <h2 className="text-base sm:text-lg mb-4">カテゴリ別評価</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <LabeledRating
+            label="見やすさ"
+            icon={<FaEye />}
+            rating={average.visibility}
+            fullColor="text-green-500"
+            halfColor="text-green-300"
+          />
+          <LabeledRating
+            label="音響"
+            icon={<FaHeadphones />}
+            rating={average.sound}
+            fullColor="text-blue-500"
+            halfColor="text-blue-300"
+          />
+          <LabeledRating
+            label="周辺施設"
+            icon={<FaStore />}
+            rating={average.facilities}
+            fullColor="text-pink-500"
+            halfColor="text-pink-300"
+          />
+          <LabeledRating
+            label="アクセス"
+            icon={<FaTrain />}
+            rating={average.access}
+            fullColor="text-orange-500"
+            halfColor="text-orange-300"
+          />
         </div>
       </div>
-    </>
+    </div>
+
+    {/* フィルター・レビュー一覧 */}
+    <ReviewSearchForm artistList={artistList} onSearch={setFilters} />
+    <ReviewsList venueId={venueId} filters={filters} />
+  </div>
+</div>
+
   );
 }

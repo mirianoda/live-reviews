@@ -80,9 +80,9 @@ export default function SignUpPage() {
 
   return (
     <>
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow text-[#ef866b]">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-4 text-orange-300">無料登録</h2>
+        <h2 className="text-2xl font-bold mb-4">無料登録</h2>
       </div>
 
       {emailSent ? (
@@ -120,7 +120,7 @@ export default function SignUpPage() {
             className="w-full p-2 mb-4 bg-orange-50 border border-orange-100"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={handleSignUp} className="w-full bg-orange-300 text-white  py-3 px-4 rounded-md font-semibold hover:bg-orange-500  cursor-pointer">
+          <button onClick={handleSignUp} className="w-full bg-[#f9a691] text-white  py-3 px-4 rounded-md font-semibold hover:bg-[#ef866b]  cursor-pointer">
             無料登録する
           </button>
         </>
