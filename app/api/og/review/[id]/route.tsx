@@ -35,10 +35,10 @@ type ReviewWithUser = ReviewType & {
 
 // Next.js 14 App Router での正しいEdge APIハンドラー定義
 export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const reviewId = (await params).id;
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
+    const reviewId = (await params).id;
 
   // Supabaseから口コミデータを取得（結合含む）
   const { data, error } = await supabase
