@@ -25,6 +25,9 @@ const zenMaruGothic = Zen_Maru_Gothic({ // ← 追加
 export const metadata: Metadata = {
   title: "ライブ会場口コミサイト | 席レポ",
   description: "アイドルファンのための座席口コミ共有サイト",
+  icons: {
+    icon: "/favicon.ico?v=2",
+  },
 };
 
 export default function RootLayout({

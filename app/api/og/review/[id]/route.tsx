@@ -94,7 +94,7 @@ export async function GET(
         </h1>
         <p>🎫 座席: {review.seat_number}</p>
         <p>👀 見やすさ: {review.v_comment}</p>
-        <p style={{ marginTop: 20 }}>その他、音響・周辺施設・アクセスについてのコメントがあります</p>
+        <p style={{ fontSize: 27, marginTop: 20, color: "#676767" }}>※その他、音響・周辺施設・アクセスについてのコメントがあります</p>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 30 }}>
           <p style={{ fontSize: 22, color: "#ef866b", display: "block" }}>#席レポ</p>
           <img
