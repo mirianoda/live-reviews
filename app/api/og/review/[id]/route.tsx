@@ -60,24 +60,35 @@ export async function GET(
   // OGP画像を返す
   return new ImageResponse(
     (
-      <div
+        <div
         style={{
-          fontSize: 25,
-          padding: 70,
+          position: "relative",
+          width: "1200px",
+          height: "630px",
           backgroundColor: "#fff8f5",
+          fontSize: 28,
           color: "#333",
-          width: "100%",
-          height: "100%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          padding: "70px",
           lineHeight: 1.5,
-          backgroundImage: 'url(https://sekirepo.com/logo/waku.png)', 
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundSize: 'cover', 
         }}
       >
+        {/* 背景フレーム画像 */}
+        <img
+          src="https://sekirepo.com/logo/waku.png"
+          alt="frame"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "1200px",
+            height: "630px",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
         <h1 style={{ fontSize: 37, marginBottom: 20 }}>
         {review.artists?.name ?? "不明"}のライブに行ってきました🐻
         </h1>
