@@ -71,12 +71,18 @@ export default function Home() {
 
   return (
     <div>
-
       <div className="max-w-3xl mx-auto p-6 text-center my-15">
         <h1 className="text-xl font-bold mb-4 text-[#ef866b] sm:text-2xl">
           座席からの推しの見え方がわかる！
         </h1>
-        <Image src="/logo/logo5.png" alt="logo" width={300} height={300} className="m-auto" priority />
+        <Image
+          src="/logo/logo5.png"
+          alt="logo"
+          width={300}
+          height={300}
+          className="m-auto"
+          priority
+        />
 
         <div className="relative w-full max-w-2xl mx-auto mt-12">
           <div className="flex rounded-full border border-[#fae4de] bg-white shadow-md overflow-hidden">
@@ -115,8 +121,9 @@ export default function Home() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="mb-5 text-2xl font-bold flex">
-          <FaRegHandPointDown className="h-8 w-8 mr-2" />掲載中の会場一覧
+        <h2 className="mb-5 text-2xl font-bold flex" id="venue-list">
+          <FaRegHandPointDown className="h-8 w-8 mr-2" />
+          掲載中の会場一覧
         </h2>
         {types.map((category) => {
           const filtered = venues.filter((v) => v.type === category);
@@ -125,7 +132,9 @@ export default function Home() {
 
           return (
             <div key={category} className="mb-10">
-              <h2 className="text-xl font-bold text-[#ef866b] mb-4">{category}</h2>
+              <h2 className="text-xl font-bold text-[#ef866b] mb-4">
+                {category}
+              </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {filtered.map((venue) => (
                   <Link

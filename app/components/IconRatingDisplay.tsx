@@ -6,9 +6,9 @@ export default function IconRatingDisplay({
   rating,
   icon,
   size = "text-xl",
-  fullColor = "text-yellow-400",
-  halfColor = "text-yellow-300 opacity-70",
-  emptyColor = "text-gray-300",
+  fullColor = "text-overall",
+  halfColor = "text-overall opacity-70",
+  emptyColor = "text-empty",
 }: {
   rating: number;
   icon: ReactNode;
@@ -17,7 +17,8 @@ export default function IconRatingDisplay({
   halfColor?: string;
   emptyColor?: string;
 }) {
-  const isValidRating = typeof rating === "number" && !isNaN(rating) && rating > 0;
+  const isValidRating =
+    typeof rating === "number" && !isNaN(rating) && rating > 0;
   const safeRating = isValidRating ? rating : 0;
 
   const max = 5;
@@ -35,11 +36,7 @@ export default function IconRatingDisplay({
                 {icon}
               </span>
             ))}
-            {half && (
-              <span className={`${size} ${halfColor}`}>
-                {icon}
-              </span>
-            )}
+            {half && <span className={`${size} ${halfColor}`}>{icon}</span>}
             {Array.from({ length: empty }).map((_, i) => (
               <span key={`empty-${i}`} className={`${size} ${emptyColor}`}>
                 {icon}

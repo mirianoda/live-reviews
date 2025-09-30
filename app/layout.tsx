@@ -1,25 +1,16 @@
 import type { Metadata } from "next";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Zen_Maru_Gothic } from "next/font/google"; // ← 追加
+import { Zen_Maru_Gothic } from "next/font/google";
 import "./globals.css";
 import SupabaseProvider from "@/lib/SupabaseProvider";
+import { Toaster } from "react-hot-toast";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const zenMaruGothic = Zen_Maru_Gothic({ // ← 追加
+const zenMaruGothic = Zen_Maru_Gothic({
   variable: "--font-zen-maru",
   subsets: ["latin"],
-  weight: ["400"], // 必要なら ["400", "700"] など
+  weight: ["400"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -37,12 +28,36 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${zenMaruGothic.variable} antialiased`}
-      >
-      <Header />
+      <body className={`${zenMaruGothic.variable} antialiased`}>
+        <Header />
         <SupabaseProvider>{children}</SupabaseProvider>
-      <Footer />
+        <Footer />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              fontFamily: "font-zen",
+              background: "primary-lighter",
+              color: "foreground",
+              fontSize: "14px",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+            },
+            success: {
+              iconTheme: {
+                primary: "#10b981",
+                secondary: "#",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#ef4444",
+                secondary: "#",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

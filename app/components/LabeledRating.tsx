@@ -3,15 +3,15 @@ import { ReactNode } from "react";
 
 export default function LabeledRating({
   label,
-  icon,
   rating,
-  fullColor = "text-yellow-400",
-  halfColor = "text-yellow-300 opacity-70",
-  emptyColor = "text-gray-300",
+  icon,
+  fullColor = "text-overall",
+  halfColor = "text-overall opacity-70",
+  emptyColor = "text-empty",
 }: {
-  label: string;        // 例: "見やすさ"
-  icon: ReactNode;      // 例: <FaEye />
-  rating: number;       // 例: 4.5
+  label: string;
+  rating: number;
+  icon: ReactNode;
   fullColor?: string;
   halfColor?: string;
   emptyColor?: string;
