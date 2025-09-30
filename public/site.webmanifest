@@ -1,0 +1,16 @@
+{
+  "name": "席レポ - ライブ会場座席口コミサイト",
+  "short_name": "席レポ",
+  "description": "ライブ・コンサート会場の座席からの見え方や体験を共有するファン向けレビューサイト",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf2ef",
+  "theme_color": "#ef866b",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# 重要なページを明示
+Allow: /
+Allow: /venue/*
+Allow: /review/*
+
+# 管理ページやAPI は除外
+Disallow: /api/
+Disallow: /oauth/
+Disallow: /mypage/
+
+# サイトマップの場所
+Sitemap: https://sekirepo.com/sitemap.xml
