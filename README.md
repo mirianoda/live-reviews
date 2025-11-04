@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 席レポ 🎵
 
-## Getting Started
+[https://www.sekirepo.com](https://www.sekirepo.com)
 
-First, run the development server:
+ライブの感想（主に**座席からの見え方**）を共有するためのレビューサイトです。  
+アイドルファンがライブ体験を記録・共有し、これから行く人がライブ参戦準備の参考にできます。
+
+---
+
+## 🌟 主な機能
+
+- 📝 ライブレビューの投稿・編集・削除
+- 🏟️ 会場ごとのレビュー一覧表示
+- ⭐ レビューの評価システム
+- 👤 ユーザー認証（Supabase Auth）
+- 🔍 レビュー検索機能
+- 💖 お気に入り機能
+
+## 🛠️ 技術スタック
+
+- **フロントエンド**
+
+  - Next.js 15.2.1
+  - React 19
+  - TypeScript
+  - TailwindCSS
+
+- **バックエンド**
+
+  - Supabase（認証・データベース）
+
+- **デプロイ**
+  - Vercel
+
+## 🚀 ローカル開発環境のセットアップ
+
+1. リポジトリのクローン:
+
+```bash
+git clone https://github.com/mirianoda/live-reviews.git
+cd live-reviews
+```
+
+2. 依存関係のインストール:
+
+```bash
+npm install
+```
+
+3. 環境変数の設定:
+   `.env.local`ファイルを作成し、必要な環境変数を設定:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+4. 開発サーバーの起動:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いて確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📱 機能の使い方
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. アカウントを作成してログイン
+2. ライブ・コンサートのレビューを投稿
+3. 他のユーザーのレビューを閲覧・評価
+4. 会場ごとのレビューを検索・フィルタリング
 
-## Learn More
+## 🤝 コントリビューション
 
-To learn more about Next.js, take a look at the following resources:
+バグの報告や機能の提案は、GitHub の Issue を通じてお願いします。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 ライセンス
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+このプロジェクトは MIT ライセンスの下で公開されています。
 
-## Deploy on Vercel
+## 👋 作者について
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[@mirianoda](https://github.com/mirianoda) - ポートフォリオプロジェクトとして開発
